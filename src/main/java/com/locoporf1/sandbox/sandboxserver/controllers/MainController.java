@@ -4,6 +4,8 @@ import com.locoporf1.sandbox.sandboxserver.model.Sandbox;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +36,9 @@ public class MainController {
       } else if (name.equals(result.getOwner())) {
         // Remove assignation
         result.setName("");
+      } else {
+        // Already in use
+        throw new IllegalStateException("Already in use!");
       }
     }
     return result;
@@ -42,6 +47,11 @@ public class MainController {
   @GetMapping("/list")
   public Collection<Sandbox> list() {
     return sandboxes.values();
+  }
+
+  @ExceptionHandler(IllegalStateException.class)
+  public void exceptionHandler(HttpServletResponse response) {
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
   }
 
 }
