@@ -35,7 +35,7 @@ public class MainController {
         result.setOwner(name);
       } else if (name.equals(result.getOwner())) {
         // Remove assignation
-        result.setName("");
+        result.setOwner("");
       } else {
         // Already in use
         throw new IllegalStateException("Already in use!");
